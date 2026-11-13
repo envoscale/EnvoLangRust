@@ -1,6 +1,6 @@
 <img src="https://raw.githubusercontent.com/envoscale/.github/main/profile/assets/logo.svg" alt="" width="56" align="left">
 
-# EnvoScaleRust
+# EnvolRust
 
 `envoc-rs`: the EnvoL compiler ([EnvoLang](https://github.com/envoscale/EnvoLang)'s
 `compiler/`) ported to Rust, function for function, so the same compiler can be timed
@@ -75,3 +75,7 @@ because Windows Defender flags fat-LTO MinGW builds as malware (a false positive
 | `scripts/parity.sh` | Both compilers on every file: stdout, stderr and exit codes must match |
 | `scripts/bench-files.sh` | Times a command over every file in a folder |
 | `scripts/winprof.py` | A sampling profiler for envoc-built Windows programs, using envoc's `-map` |
+
+## License
+
+Same as EnvoLang: see [LICENSE](LICENSE).

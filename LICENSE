@@ -1,0 +1,67 @@
+SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0 OR LicenseRef-EnvoScale-Commercial
+
+EnvoScale License
+=================
+
+Copyright (c) 2026 Glatrix. All rights reserved except as granted below.
+
+EnvoScale (this repository, EnvolRust: its code, tests and documentation,
+together "the software")
+is offered under two licenses. You may use it under whichever one applies to you.
+
+
+1. Community License: PolyForm Noncommercial License 1.0.0
+-----------------------------------------------------------
+
+For noncommercial purposes, the software is licensed under the PolyForm
+Noncommercial License 1.0.0. Its complete, unmodified text is in
+
+    LICENSES/PolyForm-Noncommercial-1.0.0.md
+
+and its official copy is at
+
+    https://polyformproject.org/licenses/noncommercial/1.0.0
+
+Those terms allow personal use for research, experiment, testing, personal
+study, private entertainment, hobby projects and amateur pursuits, and use by
+charitable organizations, educational institutions, public research
+organizations, public safety or health organizations, environmental protection
+organizations and government institutions, as the terms define them.
+
+Required Notice: Copyright (c) 2026 Glatrix (https://github.com/envoscale)
+
+
+2. Commercial License
+---------------------
+
+Any use that the Community License does not permit requires a commercial
+license from the licensor, granted by a signed agreement (an order form that
+incorporates the EnvoScale Commercial License Agreement). In particular, use by
+or on behalf of a business, or as part of a commercial product or service,
+needs a commercial license. Evaluation licenses for businesses are available on
+request.
+
+The identifier LicenseRef-EnvoScale-Commercial refers to that agreement; see
+LICENSES/LicenseRef-EnvoScale-Commercial.md. The licensing page,
+https://github.com/envoscale/EnvoScale/blob/main/legal/licensing.md, explains in plain words who needs which license and how to obtain one.
+
+
+3. Trademarks
+-------------
+
+Neither license grants rights to the EnvoScale name or logos, except as the trademark policy,
+https://github.com/envoscale/EnvoScale/blob/main/legal/trademarks.md, allows.
+
+
+4. Contributions
+----------------
+
+Contributions are accepted only under the Contributor License Agreement at
+https://github.com/envoscale/EnvoScale/blob/main/legal/cla.md, which lets the licensor offer contributed work under both licenses
+above.
+
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED. IN NO EVENT SHALL THE LICENSOR BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY ARISING FROM THE SOFTWARE OR ITS USE, EXCEPT AS A SIGNED
+COMMERCIAL LICENSE AGREEMENT EXPRESSLY PROVIDES.

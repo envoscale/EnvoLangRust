@@ -1,4 +1,4 @@
-//! syntax/node.envo: syntax tree nodes. A tree is a Vec<Node> addressed by index; 0 means
+//! syntax/node.envol: syntax tree nodes. A tree is a Vec<Node> addressed by index; 0 means
 //! "no node". A child slot may hold a list: its first node, the rest linked through next.
 
 use super::token::*;

@@ -2,7 +2,7 @@
 
 pub mod file;
 
-/// FNV-1a over the bytes of s (util/text.envo `Hash`).
+/// FNV-1a over the bytes of s (util/text.envol `Hash`).
 #[inline]
 pub fn hash(s: &[u8]) -> u64 {
     let mut h: u64 = 0xCBF29CE484222325;
@@ -12,7 +12,7 @@ pub fn hash(s: &[u8]) -> u64 {
     h
 }
 
-/// Do a and b hold the same bytes? (util/text.envo `Same`)
+/// Do a and b hold the same bytes? (util/text.envol `Same`)
 #[inline]
 pub fn same(a: &[u8], b: &[u8]) -> bool {
     a == b
@@ -22,7 +22,7 @@ pub fn starts_with(s: &[u8], prefix: &[u8]) -> bool {
     s.starts_with(prefix)
 }
 
-/// v in decimal (util/text.envo `Decimal`).
+/// v in decimal (util/text.envol `Decimal`).
 pub fn decimal(v: u64) -> Vec<u8> {
     let mut digits = [0u8; 20];
     let mut n = 0;
@@ -49,7 +49,7 @@ pub fn append_decimal(s: &mut Vec<u8>, v: u64) {
     s.extend_from_slice(&d);
 }
 
-/// A hash map from strings to values (util/map.envo `StrMap`): open addressing with linear
+/// A hash map from strings to values (util/map.envol `StrMap`): open addressing with linear
 /// probing; the map owns copies of its keys; the table's size is a power of two and stays
 /// at most half full.
 pub struct StrMap<V> {

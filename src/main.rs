@@ -1,5 +1,5 @@
 //! envoc-rs: the Envo compiler, ported to Rust line for line from EnvoScale's compiler/
-//! (driver/main.envo), so the two can be timed on the same work. Each command prints
+//! (driver/main.envol), so the two can be timed on the same work. Each command prints
 //! exactly what envoc prints.
 
 mod diag;
@@ -16,7 +16,7 @@ const VERSION: &str = "envoc-rs 0.1.0 (a Rust port of envoc; ";
 const MAX_SOURCE: usize = 16 << 20;
 
 fn usage(fd: i32) {
-    let text = "usage: envoc-rs [--core] <command> [arguments]\n\ncommands:\n  lex <file.envo>     print the token stream of a source file\n  version             print the version\n";
+    let text = "usage: envoc-rs [--core] <command> [arguments]\n\ncommands:\n  lex <file.envol>     print the token stream of a source file\n  version             print the version\n";
     if fd == 1 {
         let _ = std::io::stdout().write_all(text.as_bytes());
     } else {
@@ -33,7 +33,7 @@ fn host_target() -> &'static str {
 }
 
 /// Reads the source file at path into src, without a leading byte order mark, and returns
-/// its index (driver/build.envo `LoadSource`).
+/// its index (driver/build.envol `LoadSource`).
 fn load_source(src: &mut Sources, path: &[u8]) -> usize {
     let text = match util::file::read_file(path) {
         Some(t) => t,
@@ -61,7 +61,7 @@ fn write_out(bytes: &[u8]) {
     let _ = std::io::stdout().write_all(bytes);
 }
 
-/// `envoc lex <file.envo>`
+/// `envoc lex <file.envol>`
 fn cmd_lex(args: &[Vec<u8>], core: bool) -> i32 {
     if args.len() != 1 {
         usage(2);
@@ -78,7 +78,7 @@ fn cmd_lex(args: &[Vec<u8>], core: bool) -> i32 {
 }
 
 /// Lexes every file in src, in order, into one token list; starts gets each file's first
-/// token (driver/build.envo `LexAll`).
+/// token (driver/build.envol `LexAll`).
 fn lex_all(src: &Sources, starts: &mut Vec<usize>, core: bool) -> Vec<syntax::token::Token> {
     let tables = LexTables::new();
     let mut all = Vec::new();
@@ -90,7 +90,7 @@ fn lex_all(src: &Sources, starts: &mut Vec<usize>, core: bool) -> Vec<syntax::to
     all
 }
 
-/// `envoc parse <file.envo>`
+/// `envoc parse <file.envol>`
 fn cmd_parse(args: &[Vec<u8>], core: bool) -> i32 {
     if args.len() != 1 {
         usage(2);

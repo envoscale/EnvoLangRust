@@ -1,4 +1,4 @@
-//! util/file.envo: reading and writing whole files.
+//! util/file.envol: reading and writing whole files.
 
 use std::io::{Read, Write};
 

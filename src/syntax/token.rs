@@ -1,4 +1,4 @@
-//! syntax/token.envo: token kinds and their spellings, numbered as in every stage so the
+//! syntax/token.envol: token kinds and their spellings, numbered as in every stage so the
 //! compilers can be compared token for token.
 
 #[derive(Clone, Copy, Debug, Default)]

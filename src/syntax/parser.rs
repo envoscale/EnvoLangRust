@@ -1,4 +1,4 @@
-//! syntax/parser.envo and parser_s1.envo: recursive descent over the token list, one method
+//! syntax/parser.envol and parser_s1.envol: recursive descent over the token list, one method
 //! per grammar rule, in the same order as envoc's, so the same trees come out and the same
 //! first error is reported at the same token.
 
@@ -1206,7 +1206,7 @@ impl<'a> Parser<'a> {
         self.err_expected("an expression")
     }
 
-    // ================================================================== Envo-S1 (parser_s1.envo)
+    // ================================================================== Envo-S1 (parser_s1.envol)
 
     fn is_word(&self, word: &[u8]) -> bool {
         self.kind() == TK_IDENT && self.tok_text(self.pos) == word

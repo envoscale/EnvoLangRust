@@ -1,4 +1,4 @@
-//! syntax/lexer.envo: the lexer. Same first error at the same position as envoc; literal
+//! syntax/lexer.envol: the lexer. Same first error at the same position as envoc; literal
 //! values are validated, not computed.
 
 use super::token::*;

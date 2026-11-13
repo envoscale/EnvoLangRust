@@ -1,4 +1,4 @@
-//! diag/report.envo: source files and diagnostics. Errors print in the format every stage
+//! diag/report.envol: source files and diagnostics. Errors print in the format every stage
 //! shares, "path:line:col: error[E####]: message", then exit with code 1.
 
 use crate::util::append_decimal;
