@@ -1,0 +1,24 @@
+[package]
+name = "envoc-rs"
+version = "0.1.0"
+edition = "2021"
+description = "A line-for-line Rust port of envoc, the Envo compiler, for benchmarking it against Rust."
+publish = false
+
+[[bin]]
+name = "envoc-rs"
+path = "src/main.rs"
+
+[dependencies]
+
+[profile.release]
+opt-level = 3
+codegen-units = 1
+panic = "abort"
+# Fat LTO makes Windows Defender flag the MinGW build as malware (a false positive), so it
+# is on only in the `lto` profile, which the Linux benchmarks use.
+lto = false
+
+[profile.lto]
+inherits = "release"
+lto = "fat"
