@@ -2,9 +2,9 @@
 
 # EnvoScaleRust
 
-`envoc-rs`: the Envo compiler ([EnvoScale](https://github.com/envoscale/EnvoScale)'s
+`envoc-rs`: the Envol compiler ([EnvoScale](https://github.com/envoscale/EnvoScale)'s
 `compiler/`) ported to Rust, function for function, so the same compiler can be timed
-built by `envoc` and built by `rustc`. That tells us how good Envo's generated code is,
+built by `envoc` and built by `rustc`. That tells us how good Envol's generated code is,
 and where to make it better.
 
 Rules for the port:
@@ -12,9 +12,9 @@ Rules for the port:
 - **Same algorithms and data structures.** The hash map is envoc's (FNV-1a, linear
   probing, the same growth); the tree is the same flat array of nodes; the same steps in
   the same order. What changes is only what the language makes natural: Rust's `Vec`,
-  slices and borrowing instead of Envo's `List`, `str` and `ref`.
+  slices and borrowing instead of Envol's `List`, `str` and `ref`.
 - **Same output, byte for byte.** Every command prints exactly what `envoc` prints,
-  errors included; `scripts/parity.sh` checks it on every `.envo` file in EnvoScale.
+  errors included; `scripts/parity.sh` checks it on every `.envol` file in EnvoScale.
 - **No crates.** The standard library only.
 
 ## Status
@@ -50,10 +50,12 @@ What each change to envoc's code generation gave, on Windows 10 (envoc-rs: 656 m
 | results computed in their own registers | 3,133 ms | 3,894 ms |
 | ten registers instead of five | 3,000 ms | 3,724 ms |
 | unsigned division by constants, `match` as jump tables | 2,752 ms | 3,505 ms |
+| arguments in registers, `&&`/`||` threaded into one branch, small multi-block functions inlined | 2,610 ms | 3,453 ms |
 
-So far: 38% and 30% faster, and still about 4.5× behind. The profile (`scripts/winprof.py`)
-says what is next: the copies `List.Get` returns, calls (arguments go through the stack),
-loops (nothing is hoisted yet), and the allocator.
+So far: 41% and 31% faster, and still about 4× behind. The profile (`scripts/winprof.py`)
+says what is next: the copies `List.Get` returns, loops (nothing is hoisted yet, so a
+loop reloads a slice's pointer and length every time round), addressing modes, and the
+allocator.
 
 ## Use
 
