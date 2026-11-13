@@ -78,4 +78,4 @@ because Windows Defender flags fat-LTO MinGW builds as malware (a false positive
 
 ## License
 
-Same as EnvoLang: see [LICENSE](LICENSE).
+Apache-2.0: see [LICENSE](LICENSE) and [NOTICE](NOTICE).

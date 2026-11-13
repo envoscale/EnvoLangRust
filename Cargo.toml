@@ -1,6 +1,7 @@
 [package]
 name = "envoc-rs"
 version = "0.1.0"
+license = "Apache-2.0"
 edition = "2021"
 description = "A line-for-line Rust port of envoc, the Envo compiler, for benchmarking it against Rust."
 publish = false
