@@ -34,7 +34,7 @@ job summary has the table).
 
 On Linux (CI, envoc 0.5.0 against envoc-rs with fat LTO):
 
-| | envoc (Envo) | envoc-rs (Rust) | |
+| | envoc (Envol) | envoc-rs (Rust) | |
 |---|---|---|---|
 | `lex` | 2,606 ms | 228 ms | Rust 11× faster |
 | `parse` | 2,850 ms | 285 ms | Rust 10× faster |
@@ -45,7 +45,7 @@ What each change to envoc's code generation gave, on Windows 10 (envoc-rs: 656 m
 | envoc | `lex` | `parse` |
 |---|---|---|
 | 0.5.0 | 4,429 ms | 5,028 ms |
-| locals promoted to SSA values (`opt/mem2reg.envo`) | 3,755 ms | 4,418 ms |
+| locals promoted to SSA values (`opt/mem2reg.envol`) | 3,755 ms | 4,418 ms |
 | compare and branch fused, fall-through, immediates, direct branch moves | 3,328 ms | 4,195 ms |
 | results computed in their own registers | 3,133 ms | 3,894 ms |
 | ten registers instead of five | 3,000 ms | 3,724 ms |

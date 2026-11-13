@@ -7,7 +7,7 @@ set -eu
 envoc=$1; rs=$2; root=$3; rounds=${4:-5}
 out=bench-out
 mkdir -p "$out"
-big="$out/big.envo"
+big="$out/big.envol"
 : > "$big"
 for i in 1 2 3 4 5 6 7 8 9 10; do
     for f in $(tr -d '\r' < "$root/compiler/files.txt"); do cat "$root/compiler/$f" >> "$big"; echo >> "$big"; done
@@ -23,7 +23,7 @@ best() {
     done
     echo "$b"
 }
-echo "| $lines lines | envoc (Envo) | envoc-rs (Rust) | Rust / Envo |"
+echo "| $lines lines | envoc (Envol) | envoc-rs (Rust) | Rust / Envo |"
 echo "|---|---|---|---|"
 for cmd in lex parse; do
     "$envoc" "$cmd" "$big" > "$out/a.txt"; "$rs" "$cmd" "$big" > "$out/b.txt"
