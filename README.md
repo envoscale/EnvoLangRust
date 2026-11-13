@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/envoscale/EnvoScale/main/docs/images/logo.svg" alt="" width="56" align="left">
+
 # EnvoScaleRust
 
 `envoc-rs`: the Envo compiler ([EnvoScale](https://github.com/envoscale/EnvoScale)'s

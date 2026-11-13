@@ -1,0 +1,61 @@
+# Builds EnvoScale at envoscale.ref and envoc-rs, checks they print the same on every
+# EnvoScale file, and times them on Linux. A tag v* publishes envoc-rs for Linux and Windows.
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - run: |
+          git clone -q https://github.com/envoscale/EnvoScale envoscale
+          git -C envoscale -c advice.detachedHead=false checkout -q "$(cat envoscale.ref)"
+          cd envoscale && ./build.sh build
+      - run: cargo build --profile lto
+      - run: |
+          for c in lex parse "parse --core"; do
+            ./scripts/parity.sh "$PWD/envoscale/build/envoc/envoc" "$PWD/target/lto/envoc-rs" envoscale $c
+          done
+      - run: ./scripts/bench.sh envoscale/build/envoc/envoc target/lto/envoc-rs envoscale | tee -a "$GITHUB_STEP_SUMMARY"
+      - run: cp target/lto/envoc-rs envoc-rs-x86_64-linux
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: envoc-rs-linux
+          path: envoc-rs-x86_64-linux
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - run: cargo build --profile lto
+      - run: copy target\lto\envoc-rs.exe envoc-rs-x86_64-windows.exe
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: envoc-rs-windows
+          path: envoc-rs-x86_64-windows.exe
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [linux, windows]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          path: out
+          merge-multiple: true
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" out/* --repo "$GITHUB_REPOSITORY" --title "envoc-rs $GITHUB_REF_NAME" --notes "envoc ported to Rust (lexer and parser so far), built with fat LTO. Same output as envoc at the EnvoScale commit in envoscale.ref."
