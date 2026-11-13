@@ -51,11 +51,12 @@ What each change to envoc's code generation gave, on Windows 10 (envoc-rs: 656 m
 | ten registers instead of five | 3,000 ms | 3,724 ms |
 | unsigned division by constants, `match` as jump tables | 2,752 ms | 3,505 ms |
 | arguments in registers, `&&`/`||` threaded into one branch, small multi-block functions inlined | 2,610 ms | 3,453 ms |
+| small copies unrolled (`str` and slice copies were `rep movsb`), field addresses folded into loads and stores, short encodings, loop-invariant loads hoisted | 1,518 ms | 1,835 ms |
 
-So far: 41% and 31% faster, and still about 4× behind. The profile (`scripts/winprof.py`)
-says what is next: the copies `List.Get` returns, loops (nothing is hoisted yet, so a
-loop reloads a slice's pointer and length every time round), addressing modes, and the
-allocator.
+So far: 66% and 64% faster, and about 2.3× behind (envoc-rs measured 671 ms and 757 ms
+the same day). The profile (`scripts/winprof.py`)
+says what is next: bounds and overflow checks inside loops, the temporary copies made
+to pass a `str` or slice, and the allocator.
 
 ## Use
 
