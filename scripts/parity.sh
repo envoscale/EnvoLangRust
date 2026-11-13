@@ -6,7 +6,7 @@ set -u
 envoc=$1; rs=$2; root=$3; cmd=$4; mode=${5:-}
 t=$(mktemp -d)
 same=0; differ=0
-for f in $(cd "$root" && find . -name '*.envo' -not -path './build/*' | LC_ALL=C sort); do
+for f in $(cd "$root" && find . -name '*.envol' -not -path './build/*' | LC_ALL=C sort); do
     dir=$(dirname "$f"); base=$(basename "$f")
     (cd "$root/$dir" && "$envoc" $mode "$cmd" "$base") > "$t/o1" 2> "$t/e1"; r1=$?
     (cd "$root/$dir" && "$rs" $mode "$cmd" "$base") > "$t/o2" 2> "$t/e2"; r2=$?

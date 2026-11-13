@@ -4,7 +4,7 @@
 # round). Process start-up is included, as it is for anyone running the compiler.
 set -u
 c=$1; dir=$2; cmd=$3; rounds=$4
-files=$(cd "$dir" && find . -name '*.envo' | LC_ALL=C sort)
+files=$(cd "$dir" && find . -name '*.envol' | LC_ALL=C sort)
 best=0
 r=0
 while [ "$r" -lt "$rounds" ]; do
