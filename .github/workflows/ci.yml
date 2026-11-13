@@ -58,4 +58,5 @@ jobs:
           merge-multiple: true
       - env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" out/* --repo "$GITHUB_REPOSITORY" --title "envoc-rs $GITHUB_REF_NAME" --notes "envoc ported to Rust (lexer and parser so far), built with fat LTO. Same output as envoc at the EnvoScale commit in envolang.ref."
+        run: |
+          gh release create "$GITHUB_REF_NAME" out/* --repo "$GITHUB_REPOSITORY" --title "envoc-rs $GITHUB_REF_NAME" --notes "envoc-rs: the EnvoL compiler's lexer and parser ported to Rust, function for function, built with fat LTO. Same output as envoc at the EnvoLang commit in envolang.ref; used to benchmark EnvoL's generated code. Apache-2.0."
