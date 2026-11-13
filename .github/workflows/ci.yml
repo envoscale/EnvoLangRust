@@ -1,5 +1,5 @@
-# Builds EnvoScale at envolang.ref and envoc-rs, checks they print the same on every
-# EnvoScale file, and times them on Linux. A tag v* publishes envoc-rs for Linux and Windows.
+# Builds EnvoLang at envolang.ref and envoc-rs, checks they print the same on every
+# EnvoLang file, and times them on Linux. A tag v* publishes envoc-rs for Linux and Windows.
 name: ci
 
 on:
@@ -23,9 +23,9 @@ jobs:
       - run: cargo build --profile lto
       - run: |
           for c in lex parse "parse --core"; do
-            ./scripts/parity.sh "$PWD/envoscale/build/envoc/envoc" "$PWD/target/lto/envoc-rs" envoscale $c
+            ./scripts/parity.sh "$PWD/envolang/build/envoc/envoc" "$PWD/target/lto/envoc-rs" envolang $c
           done
-      - run: ./scripts/bench.sh envolang/build/envoc/envoc target/lto/envoc-rs envoscale | tee -a "$GITHUB_STEP_SUMMARY"
+      - run: ./scripts/bench.sh envolang/build/envoc/envoc target/lto/envoc-rs envolang | tee -a "$GITHUB_STEP_SUMMARY"
       - run: cp target/lto/envoc-rs envoc-rs-x86_64-linux
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:

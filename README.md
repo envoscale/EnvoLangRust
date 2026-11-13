@@ -52,11 +52,20 @@ What each change to envoc's code generation gave, on Windows 10 (envoc-rs: 656 m
 | unsigned division by constants, `match` as jump tables | 2,752 ms | 3,505 ms |
 | arguments in registers, `&&`/`||` threaded into one branch, small multi-block functions inlined | 2,610 ms | 3,453 ms |
 | small copies unrolled (`str` and slice copies were `rep movsb`), field addresses folded into loads and stores, short encodings, loop-invariant loads hoisted | 1,518 ms | 1,835 ms |
+| (the same envoc, measured again on 2026-11-13) | 1,442 ms | 1,737 ms |
+| common subexpressions and redundant loads (`opt/cse.envol`), block layout (`opt/layout.envol`), register hints for branch arguments, panic paths that no longer stop small accessors from inlining | 1,169 ms | 1,544 ms |
+| slots zeroed on entry only when something may read them first | 1,059 ms | 1,218 ms |
+| loop-invariant arithmetic, spill costs weighted by loop depth, chains of copies through temporaries collapsed, one quotient for `/` and `%` | 976 ms | 1,101 ms |
+| registers shared across lifetime holes (a loop counter returned after the loop needs no copy per round) | 921 ms | 1,083 ms |
+| bounds checks a dominating `i < n` already covers removed, `select` as `cmov` | 892 ms | 1,077 ms |
+| constants stored as immediates, small copies kept off rsi and rdi, a value just spilled read from its register; `List.Grow` moves its items in one copy | 881 ms | 1,060 ms |
 
-So far: 66% and 64% faster, and about 2.3× behind (envoc-rs measured 671 ms and 757 ms
-the same day). The profile (`scripts/winprof.py`)
-says what is next: bounds and overflow checks inside loops, the temporary copies made
-to pass a `str` or slice, and the allocator.
+From 0.5.0: 80% and 79% less time. envoc-rs measured 685 ms and 644 ms the same day, so
+Rust is 1.29× and 1.65× faster. The profile (`scripts/winprof.py`; `WINPROF_FUNC` lists
+the hottest addresses inside one function) says what is next: per-byte loops such as
+`diag.Column`'s (Rust's slice iterator checks bounds once, and LLVM counts several bytes
+at a time), the six registers envoc keeps for scratch and frames out of x86-64's
+sixteen, and the load and store of a `string`'s length on every appended byte.
 
 ## Use
 

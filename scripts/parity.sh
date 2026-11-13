@@ -1,9 +1,10 @@
 #!/bin/sh
-# parity.sh <envoc> <envoc-rs> <EnvoScale checkout> <command> [--core]
-# Runs both compilers' <command> on every .envo file in the checkout (build/ left out)
+# parity.sh <envoc> <envoc-rs> <EnvoLang checkout> <command> [--core]
+# Runs both compilers' <command> on every .envol file in the checkout (build/ left out)
 # and requires the same stdout, stderr and exit code. Prints the differences, then a count.
 set -u
 envoc=$1; rs=$2; root=$3; cmd=$4; mode=${5:-}
+[ -x "$envoc" ] || { echo "parity.sh: no compiler at $envoc" >&2; exit 1; }
 t=$(mktemp -d)
 same=0; differ=0
 for f in $(cd "$root" && find . -name '*.envol' -not -path './build/*' | LC_ALL=C sort); do
@@ -22,4 +23,5 @@ for f in $(cd "$root" && find . -name '*.envol' -not -path './build/*' | LC_ALL=
 done
 rm -rf "$t"
 echo "$cmd $mode: $same same, $differ different"
+[ "$same" -gt 0 ] || { echo "parity.sh: no .envol files under $root" >&2; exit 1; }
 [ "$differ" -eq 0 ]

@@ -5,9 +5,12 @@
 Runs the program, pauses its thread about once a millisecond, reads the instruction
 pointer, and maps it to the function it is in using the `-map` file envoc writes
 (`envoc build ... -map program.map`). Prints the functions where the samples fell.
-Only the standard library is used (ctypes).
+With WINPROF_FUNC set to a function's name, it also prints the addresses inside that
+function that were sampled most (to read next to a disassembly). Only the standard
+library is used (ctypes).
 """
 import bisect
+import os
 import ctypes
 import ctypes.wintypes as wt
 import subprocess
@@ -73,6 +76,8 @@ def main():
     base = module_base(hproc)
     hthread = k32.OpenThread(THREAD_ALL, False, tid)
     counts = {}
+    at = {}
+    focus = os.environ.get('WINPROF_FUNC', '')
     total = 0
     while p.poll() is None:
         time.sleep(0.001)
@@ -86,12 +91,18 @@ def main():
             i = bisect.bisect_right(addrs, off) - 1
             name = funcs[i][1] if i >= 0 and off < 0x10000000 else '(outside: system or runtime)'
             counts[name] = counts.get(name, 0) + 1
+            if name == focus:
+                at[off + 0x400000] = at.get(off + 0x400000, 0) + 1
             total += 1
         k32.ResumeThread(hthread)
     winmm.timeEndPeriod(1)
     print(f'{total} samples')
     for name, n in sorted(counts.items(), key=lambda x: -x[1])[:int(40)]:
         print(f'{100.0 * n / total:6.2f}%  {n:6d}  {name}')
+    if focus:
+        print(f'hot addresses in {focus}:')
+        for a, n in sorted(at.items(), key=lambda x: -x[1])[:30]:
+            print(f'  {a:#x}  {n}')
 
 
 main()

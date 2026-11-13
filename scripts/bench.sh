@@ -1,10 +1,11 @@
 #!/bin/sh
-# bench.sh <envoc> <envoc-rs> <EnvoScale checkout> [rounds]
+# bench.sh <envoc> <envoc-rs> <EnvoLang checkout> [rounds]
 # Joins the compiler's sources ten times into one file (about 240,000 lines), checks both
 # compilers print the same for each command, and prints a Markdown table of the best of
 # `rounds` wall times.
 set -eu
 envoc=$1; rs=$2; root=$3; rounds=${4:-5}
+test -f "$root/compiler/files.txt" || { echo "bench.sh: no compiler/files.txt under $root" >&2; exit 1; }
 out=bench-out
 mkdir -p "$out"
 big="$out/big.envol"
