@@ -39,12 +39,16 @@ On Linux (CI, envoc 0.5.0 against envoc-rs with fat LTO):
 | `lex` | 2,606 ms | 228 ms | Rust 11× faster |
 | `parse` | 2,850 ms | 285 ms | Rust 10× faster |
 
-The same on 2026-11-13 (270,480 lines), envoc at EnvoLang 001dc6f:
+The same on 2026-11-13 (270,480 lines):
 
-| | envoc (EnvoL) | envoc-rs (Rust) | |
-|---|---|---|---|
-| `lex` | 897 ms | 331 ms | Rust 2.7× faster |
-| `parse` | 1,037 ms | 408 ms | Rust 2.5× faster |
+| envoc at | `lex` | `parse` | envoc-rs (Rust) | Rust faster by |
+|---|---|---|---|---|
+| EnvoLang 001dc6f | 897 ms | 1,037 ms | 331 ms, 408 ms | 2.7×, 2.5× |
+| EnvoLang 805fcc0: aggregates split into scalars, `realloc` growing large blocks in place | 510 ms | 582 ms | 265 ms, 311 ms | 1.9×, 1.9× |
+
+The second row's runner was faster (envoc-rs too). Most of the gain on Linux came from
+`realloc`: a list or string that doubles is no longer copied into freshly faulted pages,
+which costs more on Linux than on Windows.
 
 The Windows numbers below are closer because envoc-rs is built there without LTO.
 
@@ -68,6 +72,7 @@ What each change to envoc's code generation gave, on Windows 10 (envoc-rs: 656 m
 | registers shared across lifetime holes (a loop counter returned after the loop needs no copy per round) | 921 ms | 1,083 ms |
 | bounds checks a dominating `i < n` already covers removed, `select` as `cmov` | 892 ms | 1,077 ms |
 | constants stored as immediates, small copies kept off rsi and rdi, a value just spilled read from its register; `List.Grow` moves its items in one copy | 881 ms | 1,060 ms |
+| locals known to be zero, compact frames, aggregates split into scalars (`opt/sroa.envol`), `realloc` growing large blocks in place | 752 ms | 905 ms |
 
 From 0.5.0: 80% and 79% less time. envoc-rs measured 685 ms and 644 ms the same day, so
 Rust is 1.29× and 1.65× faster. The profile (`scripts/winprof.py`; `WINPROF_FUNC` lists
