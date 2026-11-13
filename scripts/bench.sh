@@ -23,7 +23,7 @@ best() {
     done
     echo "$b"
 }
-echo "| $lines lines | envoc (Envol) | envoc-rs (Rust) | Rust / Envo |"
+echo "| $lines lines | envoc (Envol) | envoc-rs (Rust) | Rust / Envol |"
 echo "|---|---|---|---|"
 for cmd in lex parse; do
     "$envoc" "$cmd" "$big" > "$out/a.txt"; "$rs" "$cmd" "$big" > "$out/b.txt"
