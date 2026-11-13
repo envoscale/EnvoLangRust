@@ -39,6 +39,15 @@ On Linux (CI, envoc 0.5.0 against envoc-rs with fat LTO):
 | `lex` | 2,606 ms | 228 ms | Rust 11× faster |
 | `parse` | 2,850 ms | 285 ms | Rust 10× faster |
 
+The same on 2026-11-13 (270,480 lines), envoc at EnvoLang 001dc6f:
+
+| | envoc (EnvoL) | envoc-rs (Rust) | |
+|---|---|---|---|
+| `lex` | 897 ms | 331 ms | Rust 2.7× faster |
+| `parse` | 1,037 ms | 408 ms | Rust 2.5× faster |
+
+The Windows numbers below are closer because envoc-rs is built there without LTO.
+
 What each change to envoc's code generation gave, on Windows 10 (envoc-rs: 656 ms and
 617 ms, without LTO):
 
