@@ -1,6 +1,6 @@
 <img src="https://raw.githubusercontent.com/envoscale/.github/main/profile/assets/logo.svg" alt="" width="56" align="left">
 
-# EnvolRust
+# EnvoLangRust
 
 `envoc-rs`: the EnvoL compiler ([EnvoLang](https://github.com/envoscale/EnvoLang)'s
 `compiler/`) ported to Rust, function for function, so the same compiler can be timed
