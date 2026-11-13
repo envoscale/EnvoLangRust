@@ -1,4 +1,4 @@
-# Builds EnvoScale at envoscale.ref and envoc-rs, checks they print the same on every
+# Builds EnvoScale at envolang.ref and envoc-rs, checks they print the same on every
 # EnvoScale file, and times them on Linux. A tag v* publishes envoc-rs for Linux and Windows.
 name: ci
 
@@ -17,15 +17,15 @@ jobs:
         with:
           persist-credentials: false
       - run: |
-          git clone -q https://github.com/envoscale/EnvoScale envoscale
-          git -C envoscale -c advice.detachedHead=false checkout -q "$(cat envoscale.ref)"
-          cd envoscale && ./build.sh build
+          git clone -q https://github.com/envoscale/EnvoLang envolang
+          git -C envolang -c advice.detachedHead=false checkout -q "$(cat envolang.ref)"
+          cd envolang && ./build.sh build
       - run: cargo build --profile lto
       - run: |
           for c in lex parse "parse --core"; do
             ./scripts/parity.sh "$PWD/envoscale/build/envoc/envoc" "$PWD/target/lto/envoc-rs" envoscale $c
           done
-      - run: ./scripts/bench.sh envoscale/build/envoc/envoc target/lto/envoc-rs envoscale | tee -a "$GITHUB_STEP_SUMMARY"
+      - run: ./scripts/bench.sh envolang/build/envoc/envoc target/lto/envoc-rs envoscale | tee -a "$GITHUB_STEP_SUMMARY"
       - run: cp target/lto/envoc-rs envoc-rs-x86_64-linux
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
@@ -58,4 +58,4 @@ jobs:
           merge-multiple: true
       - env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" out/* --repo "$GITHUB_REPOSITORY" --title "envoc-rs $GITHUB_REF_NAME" --notes "envoc ported to Rust (lexer and parser so far), built with fat LTO. Same output as envoc at the EnvoScale commit in envoscale.ref."
+        run: gh release create "$GITHUB_REF_NAME" out/* --repo "$GITHUB_REPOSITORY" --title "envoc-rs $GITHUB_REF_NAME" --notes "envoc ported to Rust (lexer and parser so far), built with fat LTO. Same output as envoc at the EnvoScale commit in envolang.ref."
