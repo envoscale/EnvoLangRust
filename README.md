@@ -45,8 +45,15 @@ The same on 2026-11-13 (270,480 lines):
 |---|---|---|---|---|
 | EnvoLang 001dc6f | 897 ms | 1,037 ms | 331 ms, 408 ms | 2.7×, 2.5× |
 | EnvoLang 805fcc0: aggregates split into scalars, `realloc` growing large blocks in place | 510 ms | 582 ms | 265 ms, 311 ms | 1.9×, 1.9× |
+| EnvoLang 75faef9: caller-saved registers by liveness at each call, aggregate arguments without copies, temporaries merged into variables | 698 ms | 795 ms | 357 ms, 442 ms | 2.0×, 1.8× |
+| EnvoLang 0a51102: byte loops eight bytes a step, `\|\|` chains threaded fully | 404 ms | 469 ms | 215 ms, 293 ms | 1.9×, 1.6× |
+| EnvoLang 55dba06: dead zeroing of inlined locals removed, loop depth from real loops | 445 ms | 533 ms | 290 ms, 348 ms | 1.5×, 1.5× |
+| EnvoLang 4449f8b: no frame pointer, large blocks reserving 64 times their room | 535 ms | 637 ms | 360 ms, 427 ms | 1.5×, 1.5× |
+| EnvoLang c08cd00: `return g(...)` writing the caller's storage, tighter register hints | 372 ms | 460 ms | 267 ms, 309 ms | 1.4×, 1.5× |
 
-The second row's runner was faster (envoc-rs too). Most of the gain on Linux came from
+CI runners differ from run to run (the input also grows a little with each commit, since it
+is EnvoLang's own sources), so compare the last column. The second row's runner was faster
+(envoc-rs too). Most of the gain on Linux came from
 `realloc`: a list or string that doubles is no longer copied into freshly faulted pages,
 which costs more on Linux than on Windows.
 
@@ -73,13 +80,16 @@ What each change to envoc's code generation gave, on Windows 10 (envoc-rs: 656 m
 | bounds checks a dominating `i < n` already covers removed, `select` as `cmov` | 892 ms | 1,077 ms |
 | constants stored as immediates, small copies kept off rsi and rdi, a value just spilled read from its register; `List.Grow` moves its items in one copy | 881 ms | 1,060 ms |
 | locals known to be zero, compact frames, aggregates split into scalars (`opt/sroa.envol`), `realloc` growing large blocks in place | 752 ms | 905 ms |
+| everything up to EnvoLang c08cd00 (the Linux table's rows), averaged over four code offsets | 579 ms | 693 ms |
 
-From 0.5.0: 80% and 79% less time. envoc-rs measured 685 ms and 644 ms the same day, so
-Rust is 1.29× and 1.65× faster. The profile (`scripts/winprof.py`; `WINPROF_FUNC` lists
-the hottest addresses inside one function) says what is next: per-byte loops such as
-`diag.Column`'s (Rust's slice iterator checks bounds once, and LLVM counts several bytes
-at a time), the six registers envoc keeps for scratch and frames out of x86-64's
-sixteen, and the load and store of a `string`'s length on every appended byte.
+From 0.5.0: 87% and 86% less time. envoc-rs measured 675 ms and 634 ms the same day: on
+this machine envoc now lexes faster than envoc-rs, and Rust parses 1.09× faster. Code
+placement alone moves envoc's times by up to 10% on this Zen 1 processor, so the last row
+is the mean over the same compiler built at four code offsets. The profile
+(`scripts/winprof.py`; `WINPROF_FUNC` lists the hottest addresses inside one function)
+says what is next: the spills of large functions (DumpTree, Lexer.Next) that live across
+many calls, the load and store of a `string`'s length on every appended byte, and the
+allocation each number printed makes.
 
 ## Use
 
